@@ -9,7 +9,7 @@ export function onSearch(e) {
     console.log(searchQuery);
 
     const API_KEY = '36972286-06949545b2231b5580740924b';
-    const url = `https://pixabay.com/api/?key=${API_KEY}&q=${searchQuery}&orientation=horizontal&safesearch=true&image_type=photo`;
+    const url = `https://pixabay.com/api/?key=${API_KEY}&q=${searchQuery}&orientation=horizontal&safesearch=true&image_type=photo&page=1&per_page=15`;
 
     fetch(url)
         .then(r => r.json())

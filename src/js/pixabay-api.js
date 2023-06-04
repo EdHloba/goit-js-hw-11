@@ -1,18 +1,37 @@
-import { refs } from './refs';
+const axios = require('axios').default;
 
+const API_KEY = '36972286-06949545b2231b5580740924b';
+const BASE_URL = 'https://pixabay.com/api/';
 
-export function onSearch(e) {
-    e.preventDefault();
+export default class PixabayApiService {
+  constructor() {
+    this.searchQuery = '';
+    this.page = 1;
+  }
 
-    const searchQuery = e.currentTarget.elements.searchQuery.value;
+  async fetchArticle() {
+    const url = `${BASE_URL}?key=${API_KEY}&q=${this.searchQuery}&orientation=horizontal&safesearch=true&image_type=photo&page=${this.page}&per_page=40`;
 
-    console.log(searchQuery);
+    const response = await axios.get(url);
+    const { data } = await response;
+    this.incrementPage();
 
-    const API_KEY = '36972286-06949545b2231b5580740924b';
-    const url = `https://pixabay.com/api/?key=${API_KEY}&q=${searchQuery}&orientation=horizontal&safesearch=true&image_type=photo&page=1&per_page=15`;
+    return data.hits;
+  }
 
-    fetch(url)
-        .then(r => r.json())
-        .catch(error => {
-        Notify.failure(`❌ Sorry, there are no images matching your search query. Please try again.`)    })
+  incrementPage() {
+    this.page += 1;
+  }
+
+  resetPage() {
+    this.page = 1;
+  }
+
+  get query() {
+    return this.searchQuery;
+  }
+
+  set query(newQuery) {
+    return (this.searchQuery = newQuery);
+  }
 }
